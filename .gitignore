@@ -1,0 +1,14 @@
+*~
+.DS_Store
+*.vpp~1
+Thumbs.db
+*.vpp~*
+.idea/
+node_modules/
+npm-debug.log
+build/
+dist/
+src/bower_components/
+*-compiled.js
+*.js.map
+.sass-cache/
