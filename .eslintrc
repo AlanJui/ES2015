@@ -1,48 +1,68 @@
 {
-  "rules": {
-    "vars-on-top": 0,
-    "no-undef": 1,
-    "no-unused-vars": 0,
-    "no-mixed-spaces-and-tabs": 0,
-    "no-console": 0,
+  "parser": "babel-eslint",
 
-//    "indent": [
-//      2,
-//      "tab"
-//    ],
-    "quotes": [
-      2,
-      "single"
-    ],
-    "linebreak-style": [
-      2,
-      "unix"
-    ],
-    "semi": [
-      2,
-      "always"
-    ]
-  },
   "env": {
     "es6": true,
-    "node": true,
+    "node": true,   // for CommonJS
     "browser": true,
     "jquery": true,
     "mocha": false,
     "jasmine": false
   },
+
   "extends": "eslint:recommended",
+
   "ecmaFeatures": {
     // env = es6 doesn't include modules
     "modules": true,
     "jsx": true,
     "experimentalObjectRestSpread": true
   },
+
   "plugins": [
-//    "react"
+  //    "react"
   ],
+
   "globals": {
-//    "React": true,
-//    "ReactDOM": true
+  //    "React": true,
+  //    "ReactDOM": true
+  },
+
+  "rules": {
+    "strict": 0,
+
+    "eol-last": [0],
+
+    "vars-on-top": 0,
+    
+    "no-undef": 1,
+    
+    "no-unused-vars": 0,
+    
+    "no-mixed-spaces-and-tabs": 0,
+    
+    "no-console": 0,
+    
+    // 與 WebStorme 或 Sublime Text 3（"auto_indent": true）衝突，致使此規則運作不正常 2015-12-26
+    // "indent": [
+    //   2,
+    //   "tab"
+    // ],
+    
+    "quotes": [
+      2,
+      "single"
+    ],
+    
+    "linebreak-style": [
+      2,
+      "unix"
+    ],
+    
+    "semi": [
+      2,
+      "always"
+    ]
   }
+
 }
