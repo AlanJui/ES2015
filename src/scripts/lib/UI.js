@@ -2,7 +2,7 @@ class UI {
 
   static renderPosts(posts) {
 
-		let elements = posts.map((post) => {
+		let html = posts.map((post) => {
   		let {title, lastReply} = post;
   		// console.log(post);
   		// console.log(`title = ${title}`);
@@ -20,10 +20,24 @@ class UI {
   	});
 
   	// 放置的位置： .container
-  	let target = document.querySelector('.container');
-  	target.innerHTML = elements.join('');
+  	let element = document.querySelector('.container');
+  	element.innerHTML = html.join('');
   }
 
+  static renderActiveUsers(users) {
+  	let html = users.map((user) => {
+  		let {avatar, name} = user;
+  		return `
+        <div class="active-avatar">
+          <img width="54" src="assets/images/${avatar}">
+          <h5 class="post-author">${name}</h5>
+        </div>
+  		`;
+  	});
+  	
+  	let element = document.querySelector('.sidebar-content');
+  	element.innerHTML = html.join('');
+  }
 }
 
 export default UI;

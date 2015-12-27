@@ -1,4 +1,5 @@
 import Post from './models/Post';
+import User from './models/User';
 import UI from './lib/UI'; 
 
 Post.findAll()
@@ -7,4 +8,9 @@ Post.findAll()
 		console.log(error);
 	});
 
+User.findRecent()
+	.then(UI.renderActiveUsers)
+	.catch((error) => {
+		console.log(error);
+	});
 
