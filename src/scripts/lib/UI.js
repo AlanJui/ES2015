@@ -4,9 +4,6 @@ class UI {
 
 		let html = posts.map((post) => {
   		let {title, lastReply} = post;
-  		// console.log(post);
-  		// console.log(`title = ${title}`);
-  		// console.log(`lastReply = ${lastReply}`);
   		return `
 				<article class="post">
 		      <h2 class="post-title">
@@ -19,7 +16,6 @@ class UI {
   		`;
   	});
 
-  	// 放置的位置： .container
   	let element = document.querySelector('.container');
   	element.innerHTML = html.join('');
   }

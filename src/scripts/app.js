@@ -1,6 +1,6 @@
 import Post from './models/Post';
 import User from './models/User';
-import UI from './lib/UI'; 
+import UI from './lib/UI';
 
 Post.findAll()
 	.then(UI.renderPosts)
@@ -8,9 +8,8 @@ Post.findAll()
 		console.log(error);
 	});
 
-User.findRecent()
+User.findActiveUsers()
 	.then(UI.renderActiveUsers)
 	.catch((error) => {
 		console.log(error);
 	});
-

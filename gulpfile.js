@@ -1,143 +1,65 @@
-'use strict';
-
-var gulp = require("gulp");
-var babel = require("gulp-babel");
-var concat = require("gulp-concat");
+var gulp = require('gulp');
+var lint = require('gulp-eslint');
+var sass = require('gulp-sass');
+var fs = require('fs');
 var del = require('del');
 var browserify = require('browserify');
-var runSequence = require('run-sequence');
-var gutil = require('gulp-util');
-
 var babelify = require('babelify');
-var source = require('vinyl-source-stream');
-var sourceMaps = require("gulp-sourcemaps");
-var buffer = require('vinyl-buffer');
-var uglify = require('gulp-uglify');
+var runSequence = require('run-sequence');
+var browserSync = require('browser-sync').create();
 
-var eslint = require('gulp-eslint');
-
-var sass = require('gulp-sass');
-var autoPrefixer = require('gulp-autoprefixer');
-var browserSync = require('browser-sync');
-
-
-var SCRIPTS_SRC = ['./src/scripts/app/*.js'];
-var BUILD_DIR = './dist';
-
-gulp.task('build-clean', () => {
-	// Return the Promise from del()
-	return del([BUILD_DIR]);
-//^^^^^^
-//This is the key here, to make sure asynchronous tasks are done!
+gulp.task('build-clean', function () {
+	return del(['dist']);
 });
 
-gulp.task('build-assets', () => {
-	gulp.src('./src/assets/images/*')
-		.pipe(gulp.dest('./dist/assets/images'));
+gulp.task('build-assets', function () {
+	gulp.src('src/assets/images/*')
+		.pipe(gulp.dest('dist/assets/images'));
 
-	gulp.src('./src/assets/fonts/*')
-		.pipe(gulp.dest('./dist/assets/fonts'));
+	gulp.src('src/assets/fonts/*')
+		.pipe(gulp.dest('dist/assets/fonts'));
 });
 
-gulp.task('build-styles', () => {
-	gulp.src('./src/assets/styles/**/*.scss')
-		.pipe(sourceMaps.init())
-		.pipe(sass({outputStyle: 'compressed'}))
-		.on('error', gutil.log.bind(gutil, gutil.colors.red(
-			'\n\n' +
-			'***************************************\n' +
-			'SASS ERROR: ' +
-			'\n' +
-			'***************************************\n\n'
-		)))
-		.pipe(autoPrefixer({
-			browsers: ['last 3 versions'],
-			cascade: false
-		}))
-		.pipe(sourceMaps.write('./'))
-		.pipe(gulp.dest('dist/assets/styles'))
+gulp.task('build-html', ['build-assets'], function () {
+	return gulp.src('src/**/*.html')
+		.pipe(gulp.dest('dist'))
 		.pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('lint', () => {
-
+gulp.task('lint-scripts', function () {
 	var patterns = [
-		'./src/scripts/**/*.{js,jsx}',
+		'src/scripts/**/*.{js,jsx}',
 		'!node_modules/**',
-		'!src/bower_componments/**'
+		'!bower_componments/**'
 	];
 
 	return gulp.src(patterns)
-		.pipe(eslint())
-		.pipe(eslint.format())
-		.pipe(eslint.failAfterError());
-});
+		.pipe(lint())
+		.pipe(lint.format())
+		.pipe(lint.failAfterError());
+})
 
-
-gulp.task('build-scripts', ['lint'], () => {
-
-	return browserify({
-		entries: './src/scripts/app.js',
-		extensions: ['.js'],
-		debug: true
-	})
-		.transform(babelify, {
-			sourceMaps: true,
-			global: true,
-			ignore: /.\/node_modules\//
-		})
+gulp.task('build-scripts', ['lint-scripts'], function() {
+	return browserify({debug: true})
+		.transform(babelify)
+		.require('src/scripts/app.js', {entry: true})
 		.bundle()
-		.on('error', gutil.log.bind(gutil, 'Browserify Error'))
-		.pipe(source('bundle.js'))
-		.pipe(buffer())
-		.pipe(sourceMaps.init({loadMaps: true}))  // loads map from browserify file
-		//.pipe(uglify())
-		.pipe(sourceMaps.write('.'))
-		.pipe(gulp.dest(BUILD_DIR))
-		.pipe(browserSync.reload({stream: true}))
-		;
+		.on('error', function(err) {console.log('Error: ' + err.message); })
+		.pipe(fs.createWriteStream('dist/bundle.js'));
 });
 
-//  Gulp + ES2015 code (using export) + Babel + Browserify
-gulp.task("transpile", function () {
-	return gulp.src("src/scripts/**/*.js")
-		.pipe(sourceMaps.init())
-		.pipe(babel({modules: "common"}))
-		.pipe(concat("bundle.js"))
-		.pipe(sourceMaps.write("."))
-		.pipe(gulp.dest(BUILD_DIR));
+gulp.task('watch-scripts', ['build-scripts'], browserSync.reload);
+
+gulp.task('build-styles', function () {
+	return gulp.src('src/assets/styles/**/*.scss')
+		.pipe(sass())
+		.pipe(gulp.dest('dist/assets/styles'))
+		.pipe(browserSync.stream());
 });
 
-gulp.task('build-html', () => {
-	gulp.src('./src/index.html')
-		.pipe(gulp.dest(BUILD_DIR))
-		.pipe(browserSync.reload({stream: true}))
-	;
-});
-
-gulp.task('browserSync', (callback) => {
-	browserSync({
-		server: {
-			baseDir: BUILD_DIR
-		}
-	});
-	callback();
-});
-
-gulp.task('reload', () => {
-	return browserSync.reload({stream: true});
-});
-
-gulp.task('watch', () => {
-	gulp.watch('./src/scripts/**/*.js', ['build-scripts']);
-	gulp.watch('./src/index.html', ['build-html']);
-	gulp.watch('./src/assets/styles/**/*.scss', ['build-styles']);
-});
-
-gulp.task('build', (callback) => {
+gulp.task('build', function (callback) {
 	runSequence(
 		'build-clean',
-		'build-assets',
 		'build-styles',
 		'build-scripts',
 		'build-html',
@@ -145,12 +67,18 @@ gulp.task('build', (callback) => {
 	);
 });
 
-gulp.task('default', (callback) => {
-	runSequence(
-		'build',
-		'browserSync',
-		'watch',
-		callback
-	);
+gulp.task('serve', ['build'], function () {
+	browserSync.init({
+		server: {
+			baseDir: 'dist'
+		}
+	});
+
+	gulp.watch('src/assets/styles/**/*.scss', ['build-styles']);
+
+	gulp.watch('src/**/*.html', ['build-html']);
+
+	gulp.watch('src/scripts/**/*.js', ['watch-scripts']);
 });
 
+gulp.task('default', ['serve']);

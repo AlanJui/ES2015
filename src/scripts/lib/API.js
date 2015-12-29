@@ -1,26 +1,23 @@
-import URI from '../confnig';
+import * as config from '../config';
 
-let API = {fetch};
-
-function fetch(path, errorMsg) {
-	let url = `${URI}/${path}`;
+export function fetch(path) {
 
 	return new Promise((resolve, reject) => {
-		  let request = new XMLHttpRequest();
+		let url = `${config.BASE_URI}/${path}`;
+	  let request = new XMLHttpRequest();
 
-		  request.open('GET', url);
-		  request.send();
+	  request.open('GET', url);
+	  request.send();
 
-		  request.onload = () => {
-		  	if (request.status === 200) {
-		  		resolve(JSON.parse(request.response));
-		  	}
-		  };
+	  request.onload = () => {
+	  	if (request.status === 200) {
+	  		resolve(JSON.parse(request.response));
+	  	}
+	  };
 
-		  request.onerror = (event) => {
-		  	reject(new Error(`Error: ${errorMsg}`));
-		  };
+	  request.onerror = (event) => {
+	  	reject(new Error(`API Error: can not read ${path}`));
+	  };
 	});
-}
 
-export default API;
+}

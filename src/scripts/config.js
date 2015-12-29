@@ -1,3 +1,6 @@
-const URI = 'http://localhost:5000';
+// const BASE_URI = 'http://localhost:5000';
+// export {BASE_URI};
 
-export {URI};
+export const BASE_URI = `http://localhost:5000`;
+
+ 

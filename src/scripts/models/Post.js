@@ -1,9 +1,8 @@
-import API from '../lib/API';
+import * as API from '../lib/API';
 
-class Post  {
-
+class Post {
 	static findAll() {
-		API.fetch('posts', 'can not fetch posts');
+		return API.fetch('posts');
 	}
 }
 

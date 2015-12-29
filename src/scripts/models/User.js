@@ -1,12 +1,11 @@
-import API from '../lib/API';
+import * as API from '../lib/API';
 
 class User {
 
-	static findRecent() {
-		API.fetch('activeUsers', 'can not fetch Active Users');
+	static findActiveUsers() {
+		return API.fetch('activeUsers');
 	}
 
 }
 
 export default User;
-
