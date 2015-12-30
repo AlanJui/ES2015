@@ -5,10 +5,11 @@
 
 本工具主要功能如下：
  * 以 Gulp 為基底，建構「自動化建置（Auto-build）」工具
- * 支援 ES2015 JavaScript 編譯
- * 支援 ESLint ，用以檢視 JavaScript 語法無誤
- * 支援 SASS 編譯
- * 支援 BrowserSync ，可為開發時使用之 Web Server
+ * 使用 Babel 將 ES2015 JavaScript 編譯成 ES5 語法
+ * 使用 ESLint ，用以檢視 JavaScript 語法無誤
+ * 可將 Sass 編譯成 css 檔案
+ * 使用 BrowserSync ，以為開發時使用之 Web Server
+ * 使用 JSON Server 作為開發時使用之 DB Server ，可增快 RESTful API 之開發
 
 # 安裝作業
 
