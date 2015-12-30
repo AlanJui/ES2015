@@ -14,6 +14,8 @@
 
 ## 事前準備
 
+須先完成「版本控管工具」 git 安裝。 
+
 使用本工具前，須事先完成 node, npm 安裝。欲確認 node、npm 是否已完成安裝，並能正常運作，可在「終端機」輸入如下指令，以便確認：
  
     $ node -v
@@ -22,10 +24,9 @@
     $ npm -v
     3.3.12
 
+## 安裝 NodeJS 公用模組
 
-## 安裝配合本工具所需之公用 Node 模組
-
-本工具執行時，尚需配合如下之公用 Node 模組，才能正常運作：
+本工具執行時，尚需配合如下之 NodeJS 公用模組(Global)，才能正常運作：
 
  * Gulp
  * ESLint
@@ -35,7 +36,17 @@
 
     $ npm install -g gulp eslint json-server
 
-## 透過 package.json 安裝所需之 Node 模組
+## 自 GitHub 複製檔案到工作目錄
+
+依據下列之操作指示，自 GitHub Repo 將檔案複製（Clone）到個人電腦的「工作目錄」中。
+
+    $ cd <工作目錄>
+    $ git clone https://github.com/AlanJui/ES2015.git
+    $ cd ES2015
+
+## 安裝專案層級的 NodeJS 檔案
+
+透過 package.json 設定檔，安裝屬專案層級（Local）的 Node 模組。
 
     $ npm install
 
@@ -48,4 +59,42 @@
 ## 執行開發建置工具
 
     $ gulp
+
+
+# 參考資訊
+
+## Gulp 入門
+
+YouTube 教學影片：Gulp.js Build System
+
+[![Gulp.js Build System](https://i.ytimg.com/vi/LmdT2zhFmn4/default.jpg)](https://www.youtube.com/watch?v=LmdT2zhFmn4&list=PLv1YUP7gO_viROuRcGsDCNM-FUVgMYb_G)
+
+## JSON Server
+
+關於 JSON Server 更多的操作及用法，可參考：
+[JSON Server 官網](https://github.com/typicode/json-server)。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
