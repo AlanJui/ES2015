@@ -33,6 +33,11 @@ var dest = {
   main: 'dist/app.js'
 };
 
+function swallowError(error) {
+  console.log(error.message.toString());
+  this.emit('end');
+}
+
 gulp.task('clean', function() {
   return del(['dist']);
 });
@@ -57,6 +62,7 @@ gulp.task('build-fonts', function() {
 gulp.task('build-styles', function() {
   return gulp.src(src.styles)
     .pipe(sass())
+    .on('error', swallowError)
     .pipe(gulp.dest(dest.css))
     .pipe(reload({stream: true}));
 });
@@ -79,7 +85,7 @@ gulp.task('build-scripts', ['lint-scripts'], function() {
 		.transform(babelify)
 		.require(src.main, {entry: true})
 		.bundle()
-		.on('error', function(err) {console.log('Error: ' + err.message); })
+		.on('error', swallowError)
 		.pipe(fs.createWriteStream(dest.main));
 });
 

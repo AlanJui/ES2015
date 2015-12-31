@@ -26,6 +26,7 @@ $font-size: 16px;
 body {
   background: url("../images/bg-brick.png");
   background-size: 96px 96px;
+  color: $main;
   font-size: $font-size;
   font: 700 24px/1.5 "Amatic SC", cursive;
   margin: 0;
